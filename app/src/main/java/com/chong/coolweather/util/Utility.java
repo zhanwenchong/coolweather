@@ -6,6 +6,8 @@ import android.util.Log;
 import com.chong.coolweather.db.City;
 import com.chong.coolweather.db.County;
 import com.chong.coolweather.db.Province;
+import com.chong.coolweather.gson.Weather;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,7 +23,7 @@ public class Utility {
     public static boolean handleProvinceResponse(String response){
         if (!TextUtils.isEmpty(response)){
             try{
-                Log.d(TAG, "handleProvinceResponse: "+response.toString());
+//                Log.d(TAG, "handleProvinceResponse: "+response.toString());
                 JSONArray allProvinces = new JSONArray(response);
                 for (int i = 0; i < allProvinces.length(); i++) {
                     JSONObject provinceObject = allProvinces.getJSONObject(i);
@@ -41,7 +43,7 @@ public class Utility {
     public static boolean handleCityResponse(String response, int provinceId){
         if (!TextUtils.isEmpty(response)){
             try{
-                Log.d(TAG, "handleProvinceResponse: "+response.toString());
+//                Log.d(TAG, "handleProvinceResponse: "+response.toString());
                 JSONArray allCities = new JSONArray(response);
                 for (int i = 0; i < allCities.length(); i++) {
                     JSONObject cityObject = allCities.getJSONObject(i);
@@ -62,7 +64,7 @@ public class Utility {
     public static boolean handleCountyResponse(String response, int cityId){
         if (!TextUtils.isEmpty(response)){
             try{
-                Log.d(TAG, "handleProvinceResponse: "+response.toString());
+//                Log.d(TAG, "handleProvinceResponse: "+response.toString());
                 JSONArray allCounties = new JSONArray(response);
                 for (int i = 0; i < allCounties.length(); i++) {
                     JSONObject countryObject = allCounties.getJSONObject(i);
@@ -80,5 +82,17 @@ public class Utility {
         return false;
     }
 
+    public static Weather handWeatherResponse(String response){
+        try{
+            Log.d(TAG, "handWeatherResponse: "+response);
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+            String weatherContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent,Weather.class);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }
